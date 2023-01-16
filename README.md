@@ -1,4 +1,6 @@
-# README
+<img src="icon.png" alt="CTS" width="124" />
+
+# Chrome Tab Saver
 
 ## About
 

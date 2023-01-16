@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    // "src/index.html": true,
+    // "src/style.css": true,
+    // "manifest.png": true,
+    // "icon.png": true,
+
+    // "README.md": true,
+    "design.png": true,
+    "CONTRIBUTING.md": true,
+    "LICENSE": true,
+  }
+}
