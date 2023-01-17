@@ -1,12 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 html,
 body {
   user-select: none;
-  height: 350px;
-  width: 250px;
+  height: 420px;
+  width: 320px;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  color: #d0d0d0;
+  background: #121212;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  background-clip: content-box;
+  transition: background-color 300ms;
+
+  &:hover {
+    background: #1f1f1fbb;
+  }
 }
