@@ -1,6 +1,8 @@
 html,
 body {
   user-select: none;
+  height: 350px;
+  width: 250px;
 }
 
 * {
