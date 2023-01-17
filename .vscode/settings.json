@@ -7,7 +7,7 @@
     "tsconfig.node.json": true,
     ".prettierignore": true,
     ".prettierrc": true,
-    // "manifest.json": true,
+    "manifest.json": true,
     "vite.config.ts": true,
     ".gitignore": true,
     "dist": true,
