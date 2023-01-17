@@ -1,22 +1,26 @@
 import type { FC } from 'react';
 
-import styles from './components.module.scss';
+import { IWindow } from '@/utils/extension-fns';
+
 import Item from './Item';
+import styles from './components.module.scss';
 
-interface MainProps {}
+interface MainProps {
+  savedWindows: IWindow[];
+  setSavedWindows: (savedWindows: IWindow[]) => void;
+}
 
-const Main: FC<MainProps> = () => {
+const Main: FC<MainProps> = ({ savedWindows, setSavedWindows }) => {
   return (
     <main className={styles.main}>
-      <h2>Saved windows</h2>
+      <h2>
+        {savedWindows.length ? 'Saved windows' : 'No saved windows found'}
+      </h2>
 
       <div className={styles.items}>
-        <Item />
-        <Item />
-        <Item />
-        <Item />
-        <Item />
-        <Item />
+        {savedWindows.map((win, idx) => (
+          <Item key={idx} currWin={win} savedWindows={savedWindows} setSavedWindows={setSavedWindows} />
+        ))}
       </div>
     </main>
   );

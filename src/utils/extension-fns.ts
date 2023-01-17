@@ -5,6 +5,12 @@ export interface ITab {
   url: string;
 }
 
+export interface IWindow {
+  id: string;
+  name: string;
+  tabs: ITab[];
+}
+
 export const getCurrWin = async () => await chrome.windows.getCurrent();
 
 export const getCurrWinTabs = async (currWinId: number) => {
@@ -27,3 +33,7 @@ export const createNewWin = async (currWinTabs?: ITab[]) =>
     state: 'maximized',
     url: currWinTabs?.map((tab) => tab.url),
   });
+
+export const saveWindowsInLocalStorage = (windows: IWindow[]) => {
+  chrome.storage.local.set({ savedWindows: JSON.stringify(windows) }, () => {});
+};

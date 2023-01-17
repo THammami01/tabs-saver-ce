@@ -1,16 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import _styles from './App.module.scss';
 import { Footer, Header, Main } from './components';
+import { IWindow } from './utils/extension-fns';
 
 const App = () => {
-  useEffect(() => {}, []);
+  const [savedWindows, setSavedWindows] = useState<IWindow[]>([]);
+
+  useEffect(() => {
+    chrome.storage.local.get(['savedWindows'], ({ savedWindows }) => {
+      setSavedWindows(JSON.parse(savedWindows));
+    });
+  });
 
   return (
     <div>
       <Header />
-      <Main />
-      <Footer />
+      <Main savedWindows={savedWindows} setSavedWindows={setSavedWindows} />
+      <Footer savedWindows={savedWindows} setSavedWindows={setSavedWindows} />
     </div>
   );
 };

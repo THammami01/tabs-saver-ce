@@ -1,28 +1,31 @@
 import { FC, useState } from 'react';
 
 import { deleteIcon, editIcon, restoreIcon } from '@/assets';
-
-import styles from './components.module.scss';
 import {
   ITab,
+  IWindow,
   createNewWin,
-  getCurrWin,
-  getCurrWinTabs,
+  saveWindowsInLocalStorage,
 } from '@/utils/extension-fns';
 
-interface ItemProps {}
+import styles from './components.module.scss';
 
-const Item: FC<ItemProps> = () => {
+const MIN_HIGHLIGHT_LENGTH = 36;
+
+interface ItemProps {
+  currWin: IWindow;
+  savedWindows: IWindow[];
+  setSavedWindows: (savedWindows: IWindow[]) => void;
+}
+
+const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   const toggleCollapse = () => setIsCollapsed(!isCollapsed);
 
   const handleRestoreWindow = async (e: any) => {
     e.stopPropagation();
-
-    const currWin = await getCurrWin();
-    const currWinTabs = await getCurrWinTabs(currWin.id as number);
-    await createNewWin(currWinTabs as ITab[]);
+    await createNewWin(currWin.tabs);
   };
 
   const handleRenameWindow = (e: any) => {
@@ -31,37 +34,42 @@ const Item: FC<ItemProps> = () => {
 
   const handleDeleteWindow = (e: any) => {
     e.stopPropagation();
+
+    const updatedSavedWindows = savedWindows.filter(
+      (win) => win.id !== currWin.id
+    );
+
+    setSavedWindows(updatedSavedWindows);
+    saveWindowsInLocalStorage(updatedSavedWindows);
   };
+
+  const getRenderedHighlightText = (url: string) =>
+    url.length > MIN_HIGHLIGHT_LENGTH ? (
+      <>
+        {url.slice(0, MIN_HIGHLIGHT_LENGTH)}
+        <span>...</span>
+      </>
+    ) : (
+      url
+    );
 
   return (
     <div className={styles.item} onClick={toggleCollapse}>
       <div className={styles.highlight}>
-        <p className={styles.name}>Saved Window 01</p>
+        <p className={styles.name}>{currWin.name}</p>
 
         <div>
-          <div
-            className={styles.btn}
-            onClick={handleRestoreWindow}
-            // title="Restore"
-          >
+          <div className={styles.btn} onClick={handleRestoreWindow}>
             <img src={restoreIcon} alt="Restore" />
           </div>
 
           <hr />
 
-          <div
-            className={styles.btn}
-            onClick={handleRenameWindow}
-            // title="Rename"
-          >
+          <div className={styles.btn} onClick={handleRenameWindow}>
             <img src={editIcon} alt="Rename" />
           </div>
 
-          <div
-            className={styles.btn}
-            onClick={handleDeleteWindow}
-            // title="Delete"
-          >
+          <div className={styles.btn} onClick={handleDeleteWindow}>
             <img src={deleteIcon} alt="Delete" />
           </div>
         </div>
@@ -72,9 +80,11 @@ const Item: FC<ItemProps> = () => {
           <hr />
 
           <div className={styles.links}>
-            <p>1. https://tarekhammami.me/</p>
-            <p>2. https://tarekhammami.me/</p>
-            <p>3. https://tarekhammami.me/</p>
+            {currWin.tabs.map((tab: ITab, idx) => (
+              <p key={idx} title={`${tab.title} (${tab.url})`}>
+                {getRenderedHighlightText(tab.title)}
+              </p>
+            ))}
           </div>
         </>
       )}
