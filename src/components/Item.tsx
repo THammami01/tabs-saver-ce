@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
-import { deleteIcon, editIcon, restoreIcon } from '@/assets';
+import { deleteIcon, editIcon, restoreIcon, saveIcon } from '@/assets';
 import {
   ITab,
   IWindow,
@@ -20,6 +20,9 @@ interface ItemProps {
 
 const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [winName, setWinName] = useState<string>(currWin.name);
+  const inputRef = useRef(null);
 
   const toggleCollapse = () => setIsCollapsed(!isCollapsed);
 
@@ -30,6 +33,24 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
 
   const handleRenameWindow = (e: any) => {
     e.stopPropagation();
+    if (isEditing) {
+      if (!winName) {
+        (inputRef.current as any).focus();
+        return;
+      } else {
+        // TODO: Update window name in savedWindows
+        (inputRef.current as any).blur();
+
+        const updatedSavedWindows = savedWindows.map((win) =>
+          win.id === currWin.id ? { ...win, name: winName } : win
+        );
+
+        setSavedWindows(updatedSavedWindows);
+        saveWindowsInLocalStorage(updatedSavedWindows);
+      }
+    } else (inputRef.current as any).focus();
+
+    setIsEditing(!isEditing);
   };
 
   const handleDeleteWindow = (e: any) => {
@@ -53,10 +74,22 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
       url
     );
 
+  const handleWindowNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setWinName(e.target.value);
+
+  const handleInputClick = (e: any) => isEditing && e.stopPropagation();
+
   return (
     <div className={styles.item} onClick={toggleCollapse}>
       <div className={styles.highlight}>
-        <p className={styles.name}>{currWin.name}</p>
+        <input
+          type="text"
+          value={winName}
+          onChange={handleWindowNameChange}
+          readOnly={!isEditing}
+          ref={inputRef}
+          onClick={handleInputClick}
+        />
 
         <div>
           <div className={styles.btn} onClick={handleRestoreWindow}>
@@ -66,7 +99,7 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
           <hr />
 
           <div className={styles.btn} onClick={handleRenameWindow}>
-            <img src={editIcon} alt="Rename" />
+            <img src={isEditing ? saveIcon : editIcon} alt="Rename" />
           </div>
 
           <div className={styles.btn} onClick={handleDeleteWindow}>
