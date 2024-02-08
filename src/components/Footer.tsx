@@ -9,7 +9,7 @@ import {
   getCurrWin,
   getCurrWinTabs,
   saveWindowsInLocalStorage,
-} from '@/utils/extension-fns';
+} from '@/utils/helpers';
 
 import styles from './components.module.scss';
 

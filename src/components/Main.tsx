@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { IWindow } from '@/utils/extension-fns';
+import { IWindow } from '@/utils/helpers';
 
 import Item from './Item';
 import styles from './components.module.scss';

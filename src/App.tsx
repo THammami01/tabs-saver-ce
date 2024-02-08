@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import { Footer, Header, Main } from './components';
-import { IWindow } from './utils/extension-fns';
+import { IWindow } from './utils/helpers';
 
 const App = () => {
   const [savedWindows, setSavedWindows] = useState<IWindow[]>([]);
 
   useEffect(() => {
-    chrome.storage.local.get(['savedWindows'], ({ savedWindows }) => {
-      setSavedWindows(JSON.parse(savedWindows));
-    });
+    chrome.storage.local.get(['savedWindows'], ({ savedWindows }) =>
+      setSavedWindows(JSON.parse(savedWindows))
+    );
   });
 
   return (

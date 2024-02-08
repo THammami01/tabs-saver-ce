@@ -6,7 +6,7 @@ import {
   IWindow,
   createNewWin,
   saveWindowsInLocalStorage,
-} from '@/utils/extension-fns';
+} from '@/utils/helpers';
 
 import styles from './components.module.scss';
 
@@ -37,17 +37,16 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
       if (!winName) {
         (inputRef.current as any).focus();
         return;
-      } else {
-        // TODO: Update window name in savedWindows
-        (inputRef.current as any).blur();
-
-        const updatedSavedWindows = savedWindows.map((win) =>
-          win.id === currWin.id ? { ...win, name: winName } : win
-        );
-
-        setSavedWindows(updatedSavedWindows);
-        saveWindowsInLocalStorage(updatedSavedWindows);
       }
+
+      (inputRef.current as any).blur();
+
+      const updatedSavedWindows = savedWindows.map((win) =>
+        win.id === currWin.id ? { ...win, name: winName } : win
+      );
+
+      setSavedWindows(updatedSavedWindows);
+      saveWindowsInLocalStorage(updatedSavedWindows);
     } else (inputRef.current as any).focus();
 
     setIsEditing(!isEditing);
@@ -89,6 +88,7 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
           readOnly={!isEditing}
           ref={inputRef}
           onClick={handleInputClick}
+          onKeyDown={(e) => e.key === 'Enter' && handleRenameWindow(e)}
         />
 
         <div>
@@ -112,7 +112,7 @@ const Item: FC<ItemProps> = ({ currWin, savedWindows, setSavedWindows }) => {
         <>
           <hr />
 
-          <div className={styles.links}>
+          <div className={styles.tabs}>
             {currWin.tabs.map((tab: ITab, idx) => (
               <p key={idx} title={`${tab.title} (${tab.url})`}>
                 {getRenderedHighlightText(tab.title)}

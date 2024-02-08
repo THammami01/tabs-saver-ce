@@ -10,11 +10,10 @@
     "64": "icon.png",
     "128": "icon.png"
   },
-  "host_permissions": ["<all_urls>"],
   "action": {
     "default_title": "Chrome Tabs Saver",
     "default_icon": "icon.png",
     "default_popup": "index.html"
   },
-  "permissions": ["activeTab", "scripting", "storage", "tabs"]
+  "permissions": ["storage", "tabs"]
 }

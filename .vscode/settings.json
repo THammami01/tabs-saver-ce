@@ -16,7 +16,7 @@
     ".dccache": true,
     "**/*.d.ts": true,
     "README.md": true,
-    "design.png": true,
+    "background.png": true,
     "CONTRIBUTING.md": true,
     "LICENSE": true,
   }
